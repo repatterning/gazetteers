@@ -17,7 +17,9 @@ def main():
 
     # Steps
     src.gauges.interface.Interface().exc()
+    src.care.interface.Interface(connector=connector, arguments=arguments).exc()
 
+    # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
 
@@ -37,6 +39,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
+    import src.care.interface
     import src.gauges.interface
     import src.elements.s3_parameters as s3p
     import src.elements.service as sr
@@ -50,7 +53,7 @@ if __name__ == '__main__':
     connector: boto3.session.Session
     s3_parameters: s3p.S3Parameters
     service: sr.Service
-    attributes: dict
-    connector, s3_parameters, service, attributes = src.preface.interface.Interface().exc()
+    arguments: dict
+    connector, s3_parameters, service, arguments = src.preface.interface.Interface().exc()
 
     main()
