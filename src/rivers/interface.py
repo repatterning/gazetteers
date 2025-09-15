@@ -1,8 +1,9 @@
-"""Module"""
+"""Module rivers/interface.py"""
 import os
 import shutil
 
 import config
+
 
 class Interface:
     """
