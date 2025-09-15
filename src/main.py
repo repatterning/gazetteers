@@ -16,11 +16,11 @@ def main():
     logger.info(__name__)
 
     # Steps
-    src.gauges.interface.Interface().exc()
+    # src.gauges.interface.Interface().exc()
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
 
     # Transfer
-    src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    # src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
 
     # Deleting __pycache__
