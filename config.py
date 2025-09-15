@@ -24,3 +24,8 @@ class Config:
 
         # Template
         self.s3_parameters_key = 's3_parameters.yaml'
+
+        # Care
+        self.care_ = ('https://geo.spatialhub.scot/geoserver/sh_chep/wfs?service=WFS&'
+                      'authkey={spatial-hub-geoserver}&request=GetFeature&typeName=sh_chep:pub_chep&format_options'
+                      '=filename:Care_Homes_for_Older_People_-_Scotland&outputFormat=application/json')
