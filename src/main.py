@@ -16,7 +16,7 @@ def main():
     logger.info(__name__)
 
     # Steps
-    src.data.interface.Interface(attributes=attributes).exc()
+    src.gauges.interface.Interface(attributes=attributes).exc()
 
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
-    import src.data.interface
+    import src.gauges.interface
     import src.elements.s3_parameters as s3p
     import src.elements.service as sr
     import src.functions.cache
