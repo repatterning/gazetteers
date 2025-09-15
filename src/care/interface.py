@@ -37,7 +37,7 @@ class Interface:
         """
 
         authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
-        filename = self.__configurations.care_.format(authkey=authkey)
+        filename = self.__configurations.url_spatial_hub_care.format(authkey=authkey)
 
         try:
             return geopandas.read_file(filename=filename)
