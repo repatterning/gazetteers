@@ -16,7 +16,7 @@ def main():
     logger.info(__name__)
 
     # Steps
-    # src.gauges.interface.Interface().exc()
+    src.gauges.interface.Interface().exc()
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
 
     # Transfer
