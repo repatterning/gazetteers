@@ -16,6 +16,8 @@ class Config:
         Constructor
         """
 
+        self.data = os.path.join(os.getcwd(), 'data')
+
         self.warehouse: str = os.path.join(os.getcwd(), 'warehouse')
         self.references_ = os.path.join(self.warehouse, 'references')
         self.cartography_ = os.path.join(self.warehouse, 'cartography')
