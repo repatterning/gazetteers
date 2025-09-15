@@ -16,7 +16,7 @@ def main():
     logger.info(__name__)
 
     # Steps
-    src.gauges.interface.Interface(attributes=attributes).exc()
+    src.gauges.interface.Interface().exc()
 
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
