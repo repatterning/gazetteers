@@ -45,6 +45,10 @@ class Interface:
             raise err from err
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         frame = self.__get_data()
         filename = os.path.join(self.__configurations.cartography_, 'care.geojson')
