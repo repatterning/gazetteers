@@ -6,10 +6,10 @@ import os.path
 import pandas as pd
 
 import config
-import src.data.assets
-import src.data.codes
-import src.data.rating
-import src.data.stations
+import src.gauges.assets
+import src.gauges.codes
+import src.gauges.rating
+import src.gauges.stations
 import src.functions.directories
 import src.functions.streams
 
@@ -53,14 +53,14 @@ class Interface:
         """
 
         # Retrieving the codes of <level> sequences, and the details of stations that record <level> sequences.
-        codes = src.data.codes.Codes().exc()
-        stations = src.data.stations.Stations().exc()
+        codes = src.gauges.codes.Codes().exc()
+        stations = src.gauges.stations.Stations().exc()
 
         # Hence, assets; joining codes & stations, subsequently limiting by stations
         # that were recording measures from a starting point of interest.
-        assets = src.data.assets.Assets(codes=codes, stations=stations).exc()
+        assets = src.gauges.assets.Assets(codes=codes, stations=stations).exc()
         self.__persist(blob=assets, name='assets')
 
         # Rating
-        rating = src.data.rating.Rating().exc()
+        rating = src.gauges.rating.Rating().exc()
         self.__persist(blob=rating, name='rating')
