@@ -8,8 +8,6 @@ import pandas as pd
 import config
 import src.data.assets
 import src.data.codes
-import src.data.partitions
-import src.data.points
 import src.data.rating
 import src.data.stations
 import src.functions.directories
@@ -48,39 +46,6 @@ class Interface:
         message = self.__streams.write(blob=blob, path=os.path.join(self.__references_, f'{name}.csv'))
         logging.info(message)
 
-    def __span(self, assets: pd.DataFrame) -> pd.DataFrame:
-        """
-
-        :param assets:
-        :return:
-        """
-
-        starting = datetime.datetime.strptime(self.__attributes.get('starting'), '%Y-%m-%d')
-
-        if self.__attributes.get('reacquire'):
-            at_least = datetime.datetime.strptime(self.__attributes.get('at_least'), '%Y-%m-%d')
-        else:
-            at_least = datetime.datetime.strptime(self.__attributes.get('ending'), '%Y-%m-%d')
-
-        conditionals = (assets['from'] <= starting) & (assets['to'] >= at_least)
-        assets = assets.loc[conditionals, :]
-
-        return assets
-
-    def __specific(self, assets: pd.DataFrame) -> pd.DataFrame:
-        """
-
-        :param assets:
-        :return:
-        """
-
-        if self.__attributes.get('excerpt') is None:
-            return pd.DataFrame()
-
-        assets = assets.loc[assets['ts_id'].isin(self.__attributes.get('excerpt')), :]
-
-        return assets
-
     def exc(self):
         """
 
@@ -99,23 +64,3 @@ class Interface:
         # Rating
         rating = src.data.rating.Rating().exc()
         self.__persist(blob=rating, name='rating')
-
-        # Assets that have points that span a core period.
-        assets = self.__span(assets=assets.copy())
-
-        # If not starting from scratch
-        if not self.__attributes.get('reacquire'):
-            assets = self.__specific(assets=assets.copy())
-
-        # Empty
-        if assets.empty:
-            return False
-
-        # Partitions for parallel data retrieval; for parallel computing.
-        partitions = src.data.partitions.Partitions(data=assets).exc(attributes=self.__attributes)
-        logging.info(partitions)
-
-        # Retrieving time series points
-        src.data.points.Points(period=self.__attributes.get('period')).exc(partitions=partitions)
-
-        return True
