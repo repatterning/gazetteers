@@ -32,4 +32,8 @@ class Interface:
         """
 
         src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.geojson')
-        shutil.copy(src=src, dst=self.__configurations.cartography_)
+
+        try:
+            shutil.copy(src=src, dst=self.__configurations.cartography_)
+        except FileNotFoundError as err:
+            raise err from err
