@@ -1,5 +1,4 @@
 """Module interface.py"""
-import datetime
 import logging
 import os.path
 
@@ -19,13 +18,10 @@ class Interface:
     Interface
     """
 
-    def __init__(self, attributes: dict):
+    def __init__(self):
         """
-
-        :param attributes: A set of data acquisition attributes.
+        Constructor
         """
-
-        self.__attributes = attributes
 
         # An instance for reading & writing CSV (comma separated values) data files.
         self.__streams = src.functions.streams.Streams()
