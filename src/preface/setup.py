@@ -60,7 +60,11 @@ class Setup:
         directories.cleanup(path=self.__configurations.warehouse)
 
         # The warehouse
-        return directories.create(path=self.__configurations.warehouse)
+        states = []
+        for path in [self.__configurations.references_, self.__configurations.cartography_]:
+            states.append(directories.create(path=path))
+
+        return all(states)
 
     def exc(self) -> bool:
         """
