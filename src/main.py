@@ -18,7 +18,7 @@ def main():
     # Steps
     src.gauges.interface.Interface().exc()
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
-    src.rivers.interface.Interface().exc()
+    src.basins.interface.Interface().exc()
 
     # Transfer
     # src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     import src.s3.s3_parameters
     import src.preface.interface
     import src.preface.setup
-    import src.rivers.interface
+    import src.basins.interface
     import src.transfer.interface
 
     connector: boto3.session.Session
