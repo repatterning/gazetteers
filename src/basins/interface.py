@@ -1,22 +1,14 @@
 """Module rivers/interface.py"""
-import os
-import shutil
+import logging
 
-import config
+import geopandas
+
+import src.basins.fine
 
 
 class Interface:
     """
-    Alas, at present a catchments GeoJSON is not available via an application programming
-    interface.  Download a GeoJSON from https://data.cefas.co.uk/view/21970, save
-    as SEPA.geojson<br><br>
-
-    root:<br>
-      &nbsp;&nbsp;data:<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;cartography: SEPA.geojson<br>
-      &nbsp;&nbsp;src:<br>
-      &nbsp;&nbsp;warehouse:<br>
-      <br>
+    The interface to the programs of the basins package
     """
 
     def __init__(self):
@@ -24,7 +16,11 @@ class Interface:
         Constructor
         """
 
-        self.__configurations = config.Config()
+        # Logging
+        logging.basicConfig(level=logging.INFO,
+                            format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
+                            datefmt='%Y-%m-%d %H:%M:%S')
+        self.__logger = logging.getLogger(__name__)
 
     def exc(self):
         """
@@ -32,9 +28,5 @@ class Interface:
         :return:
         """
 
-        src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.geojson')
-
-        try:
-            shutil.copy(src=src, dst=self.__configurations.cartography_)
-        except FileNotFoundError as err:
-            raise err from err
+        fine: geopandas.GeoDataFrame = src.basins.fine.Fine().exc()
+        self.__logger.info(fine)
