@@ -42,7 +42,7 @@ class Interface:
         message = self.__streams.write(blob=blob, path=os.path.join(self.__references_, f'{name}.csv'))
         logging.info(message)
 
-    def exc(self):
+    def exc(self) -> pd.DataFrame:
         """
 
         :return:
@@ -60,3 +60,5 @@ class Interface:
         # Rating
         rating = src.gauges.rating.Rating().exc()
         self.__persist(blob=rating, name='rating')
+
+        return assets
