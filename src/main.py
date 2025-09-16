@@ -17,10 +17,11 @@ def main():
 
     # Steps
     assets = src.gauges.interface.Interface().exc()
+    logger.info(assets)
+
+    # Hence
     src.basins.interface.Interface().exc(assets=assets)
-
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
-
 
     # Transfer
     # src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
