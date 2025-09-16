@@ -2,7 +2,7 @@ import logging
 
 import geopandas
 
-import src.boundaries.fine
+import src.basins.fine
 
 
 class Interface:
@@ -13,5 +13,5 @@ class Interface:
     @staticmethod
     def exc():
 
-        fine: geopandas.GeoDataFrame = src.boundaries.fine.Fine().exc()
+        fine: geopandas.GeoDataFrame = src.basins.fine.Fine().exc()
         logging.info(fine)
