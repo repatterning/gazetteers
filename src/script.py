@@ -14,8 +14,8 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info('Starting: %s', datetime.datetime.now().isoformat(timespec='microseconds'))
 
-    # Rivers
-    src.rivers.interface.Interface().exc()
+    # Basins
+    src.basins.interface.Interface().exc()
 
     # Deleting __pycache__
     src.functions.cache.Cache().exc()
@@ -31,7 +31,7 @@ if __name__ == '__main__':
                         format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                         datefmt='%Y-%m-%d %H:%M:%S')
 
-    import src.rivers.interface
+    import src.basins.interface
     import src.functions.cache
 
     main()
