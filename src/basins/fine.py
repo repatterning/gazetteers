@@ -46,6 +46,8 @@ class Fine:
         :return:
         """
 
+        self.__persist()
+
         try:
             return geopandas.read_file(filename=self.__src)
         except FileNotFoundError as err:
