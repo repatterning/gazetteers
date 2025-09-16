@@ -30,3 +30,4 @@ class Interface:
 
         fine: geopandas.GeoDataFrame = src.basins.fine.Fine().exc()
         self.__logger.info(fine)
+    
