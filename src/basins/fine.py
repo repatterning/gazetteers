@@ -21,11 +21,19 @@ class Fine:
     """
 
     def __init__(self):
+        """
+        Constructor
+        """
 
         self.__configurations = config.Config()        
         self.__src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.geojson')
         
     def __persist(self):
+        """
+        Ascertaining a copy of the fine-grained basins exists within the cloud-upload area
+
+        :return:
+        """
 
         try:
             shutil.copy(src=self.__src, dst=self.__configurations.cartography_)
@@ -33,6 +41,10 @@ class Fine:
             raise err from err
 
     def exc(self) -> geopandas.GeoDataFrame:
+        """
+
+        :return:
+        """
 
         try:
             return geopandas.read_file(filename=self.__src)
