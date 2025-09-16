@@ -172,6 +172,13 @@ time.strftime('%Y-%m-%d %H:%M:%S', structure)
 ```
 
 <br>
+
+Just in case vis-à-vis Scottish Environment Protection Agency:
+
+* `stationparameter_no`: The letter code of the measurable environmental characteristic, e.g., SG, i.e., Staffing Gauge, denotes water level relative to a local datum.
+* `stationparameter_name`: The name of the measurable environmental characteristic.
+
+<br>
 <br>
 
 <br>
