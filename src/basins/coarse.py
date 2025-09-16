@@ -13,14 +13,14 @@ class Coarse:
     Coarse
     """
 
-    def __init__(self, reference: pd.DataFrame, fine: geopandas.GeoDataFrame):
+    def __init__(self, assets: pd.DataFrame, fine: geopandas.GeoDataFrame):
         """
 
-        :param reference: Each instance represents a distinct gauge station, alongside its details.
+        :param assets: Each instance represents a distinct gauge station, alongside its details.
         :param fine: The low level, most granular, catchment-segments fine.
         """
 
-        self.__reference = reference
+        self.__assets = assets
         self.__fine = fine
 
     def __get_attributes(self) -> geopandas.GeoDataFrame:
@@ -30,8 +30,8 @@ class Coarse:
         """
 
         attributes = geopandas.GeoDataFrame(
-            self.__reference,
-            geometry=geopandas.points_from_xy(self.__reference['longitude'], self.__reference['latitude'])
+            self.__assets,
+            geometry=geopandas.points_from_xy(self.__assets['longitude'], self.__assets['latitude'])
         )
         attributes.crs = 'epsg:4326'
 
@@ -44,7 +44,7 @@ class Coarse:
         """
 
         attributes = self.__get_attributes()
-        catchments = self.__reference[['catchment_id', 'catchment_name']].drop_duplicates()
+        catchments = self.__assets[['catchment_id', 'catchment_name']].drop_duplicates()
 
         _coarse = []
         for code, name in zip(catchments.catchment_id.values, catchments.catchment_name.values):
