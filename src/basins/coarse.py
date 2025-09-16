@@ -31,7 +31,7 @@ class Coarse:
 
         attributes = geopandas.GeoDataFrame(
             self.__assets,
-            geometry=geopandas.points_from_xy(self.__assets['longitude'], self.__assets['latitude'])
+            geometry=geopandas.points_from_xy(self.__assets['station_longitude'], self.__assets['station_latitude'])
         )
         attributes.crs = 'epsg:4326'
 
