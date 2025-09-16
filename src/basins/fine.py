@@ -8,7 +8,7 @@ import config
 
 class Fine:
     """
-    Alas, at present a catchments GeoJSON is not available via an application programming
+    Alas, at present a catchments/river-basins GeoJSON is not available via an application programming
     interface.  Download a GeoJSON from https://data.cefas.co.uk/view/21970, save
     as SEPA.geojson<br><br>
 
