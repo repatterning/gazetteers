@@ -1,7 +1,15 @@
+"""Module metadata/interface.py"""
+
 
 class Interface:
+    """
+    The metadata of the gazetteers.
+    """
 
     def __init__(self):
+        """
+        Constructor
+        """
 
         self.metadata = {
             "care.geojson": "A geospatial data file that encodes known care home locations across Scotland.",
