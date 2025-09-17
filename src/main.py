@@ -15,12 +15,18 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info(__name__)
 
-    # Steps
-    state = src.data.interface.Interface(attributes=attributes).exc()
-    if state:
-        src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
-    else:
-        logger.info('Beware, reacquire is false and excerpt is null, therefore no data acquisition activity.')
+    # The gauge station assets, the quality rating descriptions
+    assets = src.gauges.interface.Interface().exc()
+    logger.info(assets)
+
+    # The fine & coarse level river basins
+    src.basins.interface.Interface().exc(assets=assets)
+
+    # Care homes
+    src.care.interface.Interface(connector=connector, arguments=arguments).exc()
+
+    # Transfer
+    src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Deleting __pycache__
     src.functions.cache.Cache().exc()
@@ -38,20 +44,22 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
-    import src.data.interface
+    import src.care.interface
+    import src.gauges.interface
     import src.elements.s3_parameters as s3p
     import src.elements.service as sr
     import src.functions.cache
     import src.functions.service
     import src.s3.s3_parameters
-    import src.preface.setup
-    import src.transfer.interface
     import src.preface.interface
+    import src.preface.setup
+    import src.basins.interface
+    import src.transfer.interface
 
     connector: boto3.session.Session
     s3_parameters: s3p.S3Parameters
     service: sr.Service
-    attributes: dict
-    connector, s3_parameters, service, attributes = src.preface.interface.Interface().exc()
+    arguments: dict
+    connector, s3_parameters, service, arguments = src.preface.interface.Interface().exc()
 
     main()

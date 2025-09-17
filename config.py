@@ -1,16 +1,11 @@
-"""
-Module config
-"""
+"""Module config.py"""
 import os
-import datetime
-import time
 
 
+# pylint: disable=R0903
 class Config:
     """
-    Class Config
-
-    For project settings
+    Project settings
     """
 
     def __init__(self):
@@ -18,9 +13,20 @@ class Config:
         Constructor
         """
 
-        self.warehouse: str = os.path.join(os.getcwd(), 'warehouse')
-        self.series_ = os.path.join(self.warehouse, 'data', 'series')
-        self.references_ = os.path.join(self.warehouse, 'references')
+        self.data = os.path.join(os.getcwd(), 'data')
 
-        # Template
+        self.warehouse: str = os.path.join(os.getcwd(), 'warehouse')
+        self.references_ = os.path.join(self.warehouse, 'references')
+        self.cartography_ = os.path.join(self.warehouse, 'cartography')
+
+        # Keys
         self.s3_parameters_key = 's3_parameters.yaml'
+        self.arguments_key = 'gazetteers/arguments.json'
+
+        # Care
+        self.url_spatial_hub_care = ('https://geo.spatialhub.scot/geoserver/sh_chep/wfs?service=WFS&'
+                                     'authkey={authkey}&request=GetFeature&typeName=sh_chep:pub_chep&format_options'
+                                     '=filename:Care_Homes_for_Older_People_-_Scotland&outputFormat=application/json')
+
+        # From https://data.cefas.co.uk/view/21970
+        self.cefas = 'https://raw.githubusercontent.com/repatterning/.github/refs/heads/master/profile/SEPA.zip'

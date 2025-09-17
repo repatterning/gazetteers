@@ -45,7 +45,7 @@ class Setup:
                                       bucket_name=self.__s3_parameters.internal)
 
         if bucket.exists():
-            return bucket.empty()
+            return True
 
         return bucket.create()
 
@@ -60,18 +60,19 @@ class Setup:
         directories.cleanup(path=self.__configurations.warehouse)
 
         # The warehouse
-        return directories.create(path=self.__configurations.warehouse)
+        states = []
+        for path in [self.__configurations.references_, self.__configurations.cartography_]:
+            states.append(directories.create(path=path))
 
-    def exc(self, reacquire: bool) -> bool:
+        return all(states)
+
+    def exc(self) -> bool:
         """
 
         :return:
         """
 
-        if reacquire:
-            self.__s3()
-
-        if self.__local():
+        if self.__local() & self.__s3():
             return True
 
-        sys.exit('Error: Set up step failure.')
+        sys.exit('Error: Set up failure.')

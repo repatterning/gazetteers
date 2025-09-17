@@ -1,5 +1,6 @@
 """Module dictionary.py"""
 import glob
+import logging
 import os
 
 import pandas as pd
@@ -10,13 +11,8 @@ class Dictionary:
     Class Dictionary
     """
 
-    def __init__(self, metadata: dict):
-        """
-        Constructor
-        """
-
-        # Metadata
-        self.__metadata = metadata
+    def __init__(self):
+        pass
 
     @staticmethod
     def __local(path: str, extension: str) -> pd.DataFrame:
@@ -42,21 +38,6 @@ class Dictionary:
 
         return pd.DataFrame.from_records(details)
 
-    @staticmethod
-    def __sections(local: pd.DataFrame) -> pd.DataFrame:
-        """
-
-        :param local:
-        :return:
-        """
-
-        # The second item of {warehouse}/{...}/{.../.../..., ...., ....}
-        local['section'] = local['vertex'].apply(lambda x: str(x).split(sep='/', maxsplit=3)[1])
-
-        # If a file, exclude the extension
-        local['section'] = local['section'].apply(lambda x: str(x).split(sep='.', maxsplit=2)[0])
-
-        return local
 
     def exc(self, path: str, extension: str, prefix: str) -> pd.DataFrame:
         """
@@ -68,15 +49,12 @@ class Dictionary:
         """
 
         local: pd.DataFrame = self.__local(path=path, extension=extension)
+        logging.info(local)
         if local.empty:
             return pd.DataFrame()
 
-        local = self.__sections(local=local.copy())
-
         # Building the Amazon S3 strings
         frame = local.assign(key=prefix + local["vertex"])
+        logging.info(frame)
 
-        # Assign metadata dict strings via section values
-        frame['metadata'] = frame['section'].map(lambda x: self.__metadata[str(x)])
-
-        return frame[['file', 'key', 'metadata']]
+        return frame
