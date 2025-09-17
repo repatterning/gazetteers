@@ -24,7 +24,7 @@ def main():
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
 
     # Transfer
-    # src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
+    src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
 
     # Deleting __pycache__
     src.functions.cache.Cache().exc()
