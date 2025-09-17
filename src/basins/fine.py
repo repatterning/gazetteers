@@ -26,7 +26,7 @@ class Fine:
         """
 
         self.__configurations = config.Config()
-        self.__src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.geojson')
+        self.__src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.zip')
 
     def __persist(self):
         """
@@ -49,6 +49,6 @@ class Fine:
         self.__persist()
 
         try:
-            return geopandas.read_file(filename=self.__src)
+            return geopandas.read_file(filename=f'zip:{os.sep}{os.sep}{self.__src}')
         except FileNotFoundError as err:
             raise err from err
