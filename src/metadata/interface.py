@@ -12,9 +12,12 @@ class Interface:
         """
 
         self.metadata = {
-            "care.geojson": "A geospatial data file that encodes known care home locations across Scotland.",
-            "coarse.geojson": "Scotland's hydrometric river catchments.  At present, derived.  Direct acquisition in future.",
-            "SEPA.geojson": "This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's river catchments.  The coarse.geojson file encodes the river catchment boundaries.",
+            "care.geojson": {
+                "desc": "A geospatial data file that encodes known care home locations across Scotland."},
+            "coarse.geojson": {
+                "desc": "Scotland's hydrometric river catchments.  At present, derived.  Direct acquisition in future."},
+            "SEPA.geojson": {
+                "desc": "This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's river catchments.  The coarse.geojson file encodes the river catchment boundaries."},
             "rating.csv": {
                 "key": "The quality code of a measure.",
                 "code": "The letter code of a measure.",
