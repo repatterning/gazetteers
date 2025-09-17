@@ -17,6 +17,9 @@ class Interface:
                 "desc": "A geospatial data file that encodes known care home locations across Scotland."},
             "coarse.geojson": {
                 "desc": "Scotland's hydrometric river catchments.  At present, derived.  Direct acquisition in future."},
+            "SEPA.zip": {
+                "desc": ("This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's "
+                         "river catchments.  The coarse.geojson file encodes the river catchment boundaries.")},
             "SEPA.geojson": {
                 "desc": ("This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's "
                          "river catchments.  The coarse.geojson file encodes the river catchment boundaries.")},
