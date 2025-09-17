@@ -1,4 +1,4 @@
-name: 'Hydrography: Assets'
+name: 'Hydrography: Gazetteers'
 
 on: [push]
 
