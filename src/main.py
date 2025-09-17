@@ -15,12 +15,14 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info(__name__)
 
-    # Steps
+    # The gauge station assets, the quality rating descriptions
     assets = src.gauges.interface.Interface().exc()
     logger.info(assets)
 
-    # Hence
+    # The fine & coarse level river basins
     src.basins.interface.Interface().exc(assets=assets)
+
+    # Care homes
     src.care.interface.Interface(connector=connector, arguments=arguments).exc()
 
     # Transfer
