@@ -1,14 +1,11 @@
-"""
-Module config
-"""
+"""Module config.py"""
 import os
 
 
+# pylint: disable=R0903
 class Config:
     """
-    Class Config
-
-    For project settings
+    Project settings
     """
 
     def __init__(self):
