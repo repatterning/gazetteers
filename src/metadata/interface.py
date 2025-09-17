@@ -1,6 +1,7 @@
 """Module metadata/interface.py"""
 
 
+# pylint: disable=R0903
 class Interface:
     """
     The metadata of the gazetteers.
@@ -17,7 +18,8 @@ class Interface:
             "coarse.geojson": {
                 "desc": "Scotland's hydrometric river catchments.  At present, derived.  Direct acquisition in future."},
             "SEPA.geojson": {
-                "desc": "This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's river catchments.  The coarse.geojson file encodes the river catchment boundaries."},
+                "desc": ("This geospatial data file encodes the segments, i.e., hydrometric area divisions, of Scotland's "
+                         "river catchments.  The coarse.geojson file encodes the river catchment boundaries.")},
             "rating.csv": {
                 "key": "The quality code of a measure.",
                 "code": "The letter code of a measure.",
