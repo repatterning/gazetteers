@@ -27,3 +27,6 @@ class Config:
         self.url_spatial_hub_care = ('https://geo.spatialhub.scot/geoserver/sh_chep/wfs?service=WFS&'
                                      'authkey={authkey}&request=GetFeature&typeName=sh_chep:pub_chep&format_options'
                                      '=filename:Care_Homes_for_Older_People_-_Scotland&outputFormat=application/json')
+
+        # From https://data.cefas.co.uk/view/21970
+        self.cefas = 'https://raw.githubusercontent.com/repatterning/.github/refs/heads/master/profile/SEPA.zip'
