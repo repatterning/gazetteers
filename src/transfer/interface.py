@@ -7,6 +7,7 @@ import pandas as pd
 
 import src.elements.s3_parameters as s3p
 import src.elements.service as sr
+import src.metadata.interface
 import src.s3.ingress
 import src.s3.unload
 import src.transfer.dictionary
@@ -28,19 +29,7 @@ class Interface:
         self.__service: sr.Service = service
         self.__s3_parameters: s3p.S3Parameters = s3_parameters
 
-    def __metadata(self) -> dict:
-        """
-       s3:// {bucket.name} / key = prefix + file name (including extension)
-
-       :return:
-       """
-
-        key_name = 'data/metadata.json'
-
-        buffer = src.s3.unload.Unload(s3_client=self.__service.s3_client).exc(
-            bucket_name=self.__s3_parameters.configurations, key_name=key_name)
-
-        return json.loads(buffer)
+        self.__metadata = src.metadata.interface.Interface().metadata
 
     def exc(self):
         """
@@ -48,12 +37,11 @@ class Interface:
         :return:
         """
 
-        metadata = self.__metadata()
-
         # The strings for transferring data to Amazon S3 (Simple Storage Service)
-        dictionary = src.transfer.dictionary.Dictionary(metadata=metadata)
+        dictionary = src.transfer.dictionary.Dictionary()
         strings: pd.DataFrame = dictionary.exc(
             path=os.path.join(os.getcwd(), 'warehouse'), extension='*', prefix='')
+        strings['metadata'] = strings['vertex'].apply(lambda x: self.__metadata[os.path.basename(x)])
         logging.info(strings)
 
         # Transfer
