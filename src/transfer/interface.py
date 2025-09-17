@@ -1,5 +1,4 @@
 """Module interface.py"""
-import json
 import logging
 import os
 
@@ -9,7 +8,6 @@ import src.elements.s3_parameters as s3p
 import src.elements.service as sr
 import src.metadata.interface
 import src.s3.ingress
-import src.s3.unload
 import src.transfer.dictionary
 
 
