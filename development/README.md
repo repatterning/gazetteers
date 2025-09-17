@@ -98,6 +98,11 @@ The GitHub Actions script [main.yml](../.github/workflows/main.yml) conducts cod
 
 ### pylint
 
+> [!TIP]
+> [Disabling Warnings](https://bobbyhadz.com/blog/disable-pylint-warning)
+
+<br>
+
 The directive
 
 ```shell
