@@ -25,9 +25,9 @@ class Fine:
         Constructor
         """
 
-        self.__configurations = config.Config()        
+        self.__configurations = config.Config()
         self.__src = os.path.join(self.__configurations.data, 'cartography', 'SEPA.geojson')
-        
+
     def __persist(self):
         """
         Ascertaining a copy of the fine-grained basins exists within the cloud-upload area
