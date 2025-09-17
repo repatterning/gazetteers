@@ -41,6 +41,9 @@ jobs:
           echo "Issues in relation to logic (F7), syntax (Python E9, Flake F7), mathematical
           formulae symbols (F63), undefined variable names (F82):"
           
+          printf "\n src/basins "
+          flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/basins
+          
           printf "\n src/care "
           flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/care
                     
@@ -49,6 +52,9 @@ jobs:
           
           printf "\n src/functions "
           flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/functions
+          
+          printf "\n src/gauges "
+          flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/gauges
           
           printf "\n src/preface "
           flake8 --count --select=E9,F63,F7,F82 --show-source --statistics src/preface
@@ -64,6 +70,9 @@ jobs:
           printf "\n\n"
           echo "Complexity issues:"
           
+          printf "\n src/basins "
+          flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/basins
+          
           printf "\n src/care "
           flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/care
           
@@ -72,6 +81,9 @@ jobs:
           
           printf "\n src/functions "
           flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/functions
+          
+          printf "\n src/gauges "
+          flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/gauges
           
           printf "\n src/preface "
           flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics src/preface
@@ -88,6 +100,9 @@ jobs:
           printf "\n"
           echo "============================= pylint session starts =============================="
           
+          printf "\n Package src/basins"
+          pylint --rcfile .pylintrc src/basins
+          
           printf "\n Package src/care"
           pylint --rcfile .pylintrc src/care
           
@@ -96,6 +111,9 @@ jobs:
           
           printf "\n Package src/functions"
           pylint --rcfile .pylintrc src/functions
+          
+          printf "\n Package src/gauges"
+          pylint --rcfile .pylintrc src/gauges
           
           printf "\n Package src/preface"
           pylint --rcfile .pylintrc src/preface
@@ -120,6 +138,9 @@ jobs:
           printf "\n"
           echo "============================= coverage session starts =============================="
           
+          printf "\nCoverage tests/basins/"
+          printf "\n Upcoming ... pytest --cov-report term-missing  --cov src/elements/ tests/basins/"
+          
           printf "\nCoverage tests/care/"
           printf "\n Upcoming ... pytest --cov-report term-missing  --cov src/elements/ tests/care/"
           
@@ -128,6 +149,9 @@ jobs:
           
           printf "\nCoverage tests/functions/"
           printf "\n Upcoming ... pytest --cov-report term-missing  --cov src/elements/ tests/functions/"
+          
+          printf "\nCoverage tests/gauges/"
+          printf "\n Upcoming ... pytest --cov-report term-missing  --cov src/elements/ tests/gauges/"
           
           printf "\nCoverage tests/preface/"
           printf "\n Upcoming ... pytest --cov-report term-missing  --cov src/references/ tests/preface/"
@@ -178,6 +202,14 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag "$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
+
+      - name: Delete Packages
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}
+          package-type: 'container'
+          min-versions-to-keep: 1
+          delete-only-untagged-versions: 'true'
 
   ecr:
     name: Amazon Elastic Container Registry
