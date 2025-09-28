@@ -43,7 +43,7 @@ class Interface:
         except RuntimeError as err:
             raise err from err
 
-    def exc(self, assets: pd.DataFrame):
+    def exc(self, assets: pd.DataFrame) -> geopandas.GeoDataFrame:
         """
 
         :param assets:
@@ -57,3 +57,5 @@ class Interface:
         self.__logger.info(coarse)
 
         self.__persist(coarse=coarse)
+
+        return coarse
