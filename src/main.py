@@ -17,7 +17,6 @@ def main():
 
     # The gauge station assets, the quality rating descriptions
     assets = src.gauges.interface.Interface().exc()
-    logger.info(assets)
 
     # The fine & coarse level river basins
     coarse = src.basins.interface.Interface().exc(assets=assets)
