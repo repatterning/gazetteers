@@ -18,7 +18,7 @@ class Cuttings:
 
     def __is_member(self, _polygon: shapely.geometry.polygon.Polygon) -> pd.Series:
         """
-        Determines whether a reference gauge location lies within a polygon; per reference gauge
+        Determines whether a home lies within a polygon; per home.
 
         :param _polygon: The polygon of a catchment area
         :return:
