@@ -44,17 +44,22 @@ class Interface:
         except FileNotFoundError as err:
             raise err from err
 
-    def exc(self):
+    def __persist(self, blob: geopandas.GeoDataFrame, name: str):
+
+        filename = os.path.join(self.__configurations.cartography_, name)
+
+        try:
+            blob.to_file(filename=filename, driver='GeoJSON')
+            logging.info('%s: Succeeded', filename)
+        except RuntimeError as err:
+            raise err from err
+
+    def exc(self, coarse: geopandas.GeoDataFrame):
         """
 
+        :param coarse:
         :return:
         """
 
         frame = self.__get_data()
-        filename = os.path.join(self.__configurations.cartography_, 'care.geojson')
-
-        try:
-            frame.to_file(filename=filename, driver='GeoJSON')
-            logging.info('%s: Succeeded', filename)
-        except RuntimeError as err:
-            raise err from err
+        self.__persist(blob=frame, name='care.geojson')
