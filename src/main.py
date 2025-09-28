@@ -20,10 +20,10 @@ def main():
     logger.info(assets)
 
     # The fine & coarse level river basins
-    src.basins.interface.Interface().exc(assets=assets)
+    coarse = src.basins.interface.Interface().exc(assets=assets)
 
     # Care homes
-    src.care.interface.Interface(connector=connector, arguments=arguments).exc()
+    src.care.interface.Interface(connector=connector, arguments=arguments).exc(coarse=coarse)
 
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
