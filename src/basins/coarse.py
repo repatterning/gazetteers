@@ -1,6 +1,7 @@
 """Module coarse.py"""
 import logging
 
+import dask
 import geopandas
 import pandas as pd
 import shapely
@@ -37,6 +38,27 @@ class Coarse:
 
         return attributes
 
+    @dask.delayed
+    def __intersections(self, instances: geopandas.GeoDataFrame, code: int, name: str) -> geopandas.GeoDataFrame:
+        """
+
+        :param instances:
+        :param code:
+        :param name:
+        :return:
+        """
+
+        # Which [child] polygons are associated with the catchment in focus?
+        identifiers = self.__fine.geometry.map(src.basins.cuttings.Cuttings(instances=instances).inside)
+        applicable = self.__fine.copy().loc[identifiers > 0, :]
+
+        # Convert the polygons into a single polygon.
+        frame = geopandas.GeoDataFrame({'catchment_id': [code], 'catchment_name': [name]})
+
+        frame.set_geometry([shapely.unary_union(applicable.geometry)], inplace=True)
+
+        return frame
+
     def exc(self) -> geopandas.GeoDataFrame:
         """
 
@@ -46,18 +68,12 @@ class Coarse:
         attributes = self.__get_attributes()
         catchments = self.__assets[['catchment_id', 'catchment_name']].drop_duplicates()
 
-        _coarse = []
+        computations = []
         for code, name in zip(catchments.catchment_id.values, catchments.catchment_name.values):
-
             instances = attributes.copy().loc[attributes['catchment_id'] == code, :]
-
-            # Which [child] polygons are associated with the catchment in focus?
-            identifiers = self.__fine.geometry.map(src.basins.cuttings.Cuttings(instances=instances).inside)
-            applicable = self.__fine.copy().loc[identifiers > 0, :]
-
-            # Convert the polygons into a single polygon.
-            frame = geopandas.GeoDataFrame({'catchment_id': [code], 'catchment_name': [name]})
-            _coarse.append(frame.set_geometry([shapely.unary_union(applicable.geometry)]))
+            intersections = self.__intersections(instances=instances, code=code, name=name)
+            computations.append(intersections)
+        _coarse = dask.compute(computations, scheduler='threads')[0]
 
         coarse: geopandas.GeoDataFrame = pd.concat(_coarse, ignore_index=True, axis=0)
         coarse.crs = self.__fine.crs.srs
