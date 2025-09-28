@@ -39,11 +39,11 @@ class Interface:
 
         try:
             coarse.to_file(filename=filename, driver='GeoJSON')
-            logging.info('%s: Succeeded', filename)
+            self.__logger.info('%s: Succeeded', filename)
         except RuntimeError as err:
             raise err from err
 
-    def exc(self, assets: pd.DataFrame):
+    def exc(self, assets: pd.DataFrame) -> geopandas.GeoDataFrame:
         """
 
         :param assets:
@@ -51,9 +51,8 @@ class Interface:
         """
 
         fine: geopandas.GeoDataFrame = src.basins.fine.Fine().exc()
-        self.__logger.info(fine)
-
         coarse = src.basins.coarse.Coarse(assets=assets, fine=fine).exc()
-        self.__logger.info(coarse)
 
         self.__persist(coarse=coarse)
+
+        return coarse

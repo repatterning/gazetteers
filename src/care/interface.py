@@ -4,10 +4,12 @@ import os
 
 import boto3
 import geopandas
+import pandas as pd
 
 import config
 import src.functions.cache
 import src.functions.secret
+import src.care.cuttings
 
 
 class Interface:
@@ -44,17 +46,37 @@ class Interface:
         except FileNotFoundError as err:
             raise err from err
 
-    def exc(self):
+    def __persist(self, blob: geopandas.GeoDataFrame, name: str):
         """
 
+        :param blob:
+        :param name:
+        :return:
+        """
+
+        filename = os.path.join(self.__configurations.cartography_, name)
+
+        try:
+            blob.to_file(filename=filename, driver='GeoJSON')
+            logging.info('%s: Succeeded', filename)
+        except RuntimeError as err:
+            raise err from err
+
+    def exc(self, coarse: geopandas.GeoDataFrame):
+        """
+
+        :param coarse:
         :return:
         """
 
         frame = self.__get_data()
-        filename = os.path.join(self.__configurations.cartography_, 'care.geojson')
 
-        try:
-            frame.to_file(filename=filename, driver='GeoJSON')
-            logging.info('%s: Succeeded', filename)
-        except RuntimeError as err:
-            raise err from err
+        # Determining the catchment area of each care home
+        cuttings = src.care.cuttings.Cuttings(reference=frame.to_crs(epsg=coarse.crs.to_epsg()))
+        initial: list[geopandas.GeoDataFrame] = [
+            cuttings.members(_elements=_elements) for _elements in coarse.itertuples()]
+        pockets: geopandas.GeoDataFrame = pd.concat(initial, axis=0, ignore_index=True)
+
+        # Persist
+        self.__persist(blob=frame, name='care.geojson')
+        self.__persist(blob=pockets, name='care_and_coarse_catchments.geojson')
