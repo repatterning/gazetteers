@@ -1,3 +1,4 @@
+"""Module care/cuttings.py"""
 import geopandas
 import pandas as pd
 import shapely
@@ -5,7 +6,7 @@ import shapely
 
 class Cuttings:
     """
-    Herein, the aim is to determine the catchment that each care home belongs to.
+    Herein, the aim is to determine the hydrometric catchment that each care home belongs to.
     """
 
     def __init__(self, reference: geopandas.GeoDataFrame):
