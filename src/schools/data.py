@@ -40,6 +40,6 @@ class Data:
 
         for part in self.__configurations.parts_spatial_hub_schools:
 
-            filename = self.__configurations.url_spatial_hub_care.format(authkey=authkey, part=part)
+            filename = self.__configurations.url_spatial_hub_schools.format(authkey=authkey, part=part)
             data = self.__get_data(filename=filename)
             logging.info(data)
