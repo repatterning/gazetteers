@@ -28,5 +28,11 @@ class Config:
                                      'authkey={authkey}&request=GetFeature&typeName=sh_chep:pub_chep&format_options'
                                      '=filename:Care_Homes_for_Older_People_-_Scotland&outputFormat=application/json')
 
+        # Schools
+        self.parts_spatial_hub_schools = ['sh_schl:pub_schlpd', 'sh_schl:pub_schlpn', 'sh_schl:pub_schlsd', 'sh_schl:pub_schlsn']
+        self.url_spatial_hub_schools = ('https://geo.spatialhub.scot/geoserver/sh_schl/wfs?service=WFS&'
+                                        'authkey={authkey}&request=GetFeature&typeName={part}&format_options'
+                                        '=filename:School_Catchments_-_Scotland&outputFormat=application/json')
+
         # From https://data.cefas.co.uk/view/21970
         self.cefas = 'https://raw.githubusercontent.com/repatterning/.github/refs/heads/master/profile/SEPA.zip'
