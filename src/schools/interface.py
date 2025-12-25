@@ -1,5 +1,7 @@
 
+import logging
 import boto3
+import geopandas
 
 import src.schools.data
 
@@ -19,4 +21,5 @@ class Interface:
 
     def exc(self):
 
-        src.schools.data.Data(connector=self.__connector, arguments=self.__arguments).exc()
+        data: geopandas.GeoDataFrame = src.schools.data.Data(connector=self.__connector, arguments=self.__arguments).exc()
+        logging.info(data)
