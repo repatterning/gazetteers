@@ -84,7 +84,7 @@ class Data:
 
         return data
 
-    def exc(self):
+    def exc(self) -> geopandas.GeoDataFrame:
         """
 
         :return:
@@ -109,6 +109,6 @@ class Data:
             computations.append(data)
 
         calculations: list[geopandas.GeoDataFrame] = dask.compute(computations, scheduler='threads')[0]
-        structure = pd.concat(calculations, axis=0, ignore_index=True)
+        structure: geopandas.GeoDataFrame = pd.concat(calculations, axis=0, ignore_index=True)
 
         return structure
