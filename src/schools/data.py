@@ -90,11 +90,12 @@ class Data:
         :return:
         """
 
+        # For acquiring data from the Spatial Hub
         authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
 
+        # Compute
         computations = []
         doublet = self.__configurations.spatial_hub_schools
-
         for part, label in zip(doublet.keys(), doublet.values()):
 
             filename = self.__configurations.url_spatial_hub_schools.format(authkey=authkey, part=part)
@@ -103,12 +104,11 @@ class Data:
             data = self.__get_data(filename=filename, label=label)
 
             # centroids instead of multi-polygons
-            data = self.__get_centroid(data=data.copy())
+            data: geopandas.GeoDataFrame = self.__get_centroid(data=data.copy())
 
             computations.append(data)
 
-        calculations = dask.compute(computations, scheduler='threads')[0]
-
+        calculations: list[geopandas.GeoDataFrame] = dask.compute(computations, scheduler='threads')[0]
         structure = pd.concat(calculations, axis=0, ignore_index=True)
 
-        logging.info(structure)
+        return structure
