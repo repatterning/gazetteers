@@ -9,7 +9,7 @@ import pandas as pd
 import config
 import src.functions.cache
 import src.functions.secret
-import src.care.cuttings
+import src.cuttings
 
 
 class Interface:
@@ -72,7 +72,7 @@ class Interface:
         frame = self.__get_data()
 
         # Determining the catchment area of each care home
-        cuttings = src.care.cuttings.Cuttings(reference=frame.to_crs(epsg=coarse.crs.to_epsg()))
+        cuttings = src.cuttings.Cuttings(reference=frame.to_crs(epsg=coarse.crs.to_epsg()))
         initial: list[geopandas.GeoDataFrame] = [
             cuttings.members(_elements=_elements) for _elements in coarse.itertuples()]
         pockets: geopandas.GeoDataFrame = pd.concat(initial, axis=0, ignore_index=True)
