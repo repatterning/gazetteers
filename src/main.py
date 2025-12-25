@@ -15,7 +15,6 @@ def main():
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info(__name__)
 
-    '''
     # The gauge station assets, the quality rating descriptions
     assets = src.gauges.interface.Interface().exc()
 
@@ -25,12 +24,12 @@ def main():
     # Care homes
     src.care.interface.Interface(connector=connector, arguments=arguments).exc(coarse=coarse)
 
+    # Schools
+    src.schools.interface.Interface(
+        connector=connector, arguments=arguments, coarse=coarse).exc()
+
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
-    '''
-
-    src.schools.interface.Interface(
-        connector=connector, arguments=arguments).exc()
 
     # Deleting __pycache__
     src.functions.cache.Cache().exc()
