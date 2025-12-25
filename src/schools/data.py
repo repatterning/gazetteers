@@ -1,16 +1,16 @@
-
+"""Module data.py"""
 import logging
-import shapely
 import os
 
 import boto3
+import dask
 import geopandas
 import pandas as pd
-import dask
 
 import config
 import src.functions.cache
 import src.functions.secret
+
 
 class Data:
     """
