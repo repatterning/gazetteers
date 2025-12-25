@@ -1,10 +1,12 @@
 
 import logging
+import shapely
 import os
 
 import boto3
 import geopandas
 import pandas as pd
+import dask
 
 import config
 import src.functions.cache
@@ -26,25 +28,66 @@ class Data:
         self.__secret = src.functions.secret.Secret(connector=self.__connector)
         self.__configurations = config.Config()
 
-    @staticmethod
-    def __get_data(filename: str) -> geopandas.GeoDataFrame:
+    def __persist(self, blob: geopandas.GeoDataFrame, name: str):
+        """
+
+        :param blob:
+        :param name:
+        :return:
+        """
+
+        filename = os.path.join(self.__configurations.cartography_, name)
 
         try:
-            return geopandas.read_file(filename=filename)
+            blob.to_file(filename=filename, driver='GeoJSON')
+            logging.info('%s: Succeeded', filename)
+        except RuntimeError as err:
+            raise err from err
+
+    @dask.delayed
+    def __get_data(self, filename: str, label: str) -> geopandas.GeoDataFrame:
+
+        try:
+            data = geopandas.read_file(filename=filename)
         except FileNotFoundError as err:
             raise err from err
+
+        self.__persist(blob=data, name='sch-' + label.replace(' ', '-') + '.geojson')
+
+        data.loc[:, 'label'] = label
+        data.info()
+
+        return data
+
+    @dask.delayed
+    def __get_centroid(self, data: geopandas.GeoDataFrame):
+
+        # centroid of each school's multipolygon
+        data.geometry = data.geometry.centroid
+
+        return data
 
     def exc(self):
 
         authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
 
+        computations = []
         doublet = self.__configurations.spatial_hub_schools
+
         for part, label in zip(doublet.keys(), doublet.values()):
 
-            logging.info(part)
-
             filename = self.__configurations.url_spatial_hub_schools.format(authkey=authkey, part=part)
-            data = self.__get_data(filename=filename)
-            data.loc[:, 'label'] = label
-            data.info()
-    
+
+            # the data of a set of schools
+            data = self.__get_data(filename=filename, label=label)
+
+            # centroids instead of multi-polygons
+            data = self.__get_centroid(data=data.copy())
+
+            computations.append(data)
+
+        calculations = dask.compute(computations, scheduler='threads')[0]
+
+        structure = pd.concat(calculations, axis=0, ignore_index=True)
+
+        logging.info(structure)
