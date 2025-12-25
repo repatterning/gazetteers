@@ -41,6 +41,6 @@ class Interface:
         data: geopandas.GeoDataFrame = src.schools.data.Data(
             connector=self.__connector, arguments=self.__arguments).exc()
 
-        # Intersects, Persist
+        # membership, etc.
         filename = os.path.join(self.__configurations.cartography_, 'sch-catchments.geojson')
         src.membership.Membership(coarse=self.__coarse).exc(frame=data, filename=filename)
