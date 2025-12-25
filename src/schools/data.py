@@ -73,8 +73,13 @@ class Data:
 
     @dask.delayed
     def __get_centroid(self, data: geopandas.GeoDataFrame):
+        """
 
-        # centroid of each school's multipolygon
+        :param data:
+        :return:
+        """
+
+        # Determining the centroid of each school's multipolygon; each instance represents a school.
         data.geometry = data.geometry.centroid
 
         return data
