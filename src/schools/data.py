@@ -1,5 +1,4 @@
 """Module data.py"""
-import logging
 import os
 
 import boto3
@@ -9,6 +8,7 @@ import pandas as pd
 
 import config
 import src.functions.cache
+import src.functions.geo
 import src.functions.secret
 
 
@@ -31,22 +31,7 @@ class Data:
         # Instances
         self.__secret = src.functions.secret.Secret(connector=self.__connector)
         self.__configurations = config.Config()
-
-    def __persist(self, blob: geopandas.GeoDataFrame, name: str):
-        """
-
-        :param blob: The data to be saved
-        :param name: A name for the data file
-        :return:
-        """
-
-        filename = os.path.join(self.__configurations.cartography_, name)
-
-        try:
-            blob.to_file(filename=filename, driver='GeoJSON')
-            logging.info('%s: Succeeded', filename)
-        except RuntimeError as err:
-            raise err from err
+        self.__geo = src.functions.geo.Geo()
 
     @dask.delayed
     def __get_data(self, filename: str, label: str) -> geopandas.GeoDataFrame:
@@ -64,7 +49,8 @@ class Data:
             raise err from err
 
         # Save the original data
-        self.__persist(blob=data, name='sch-' + label.replace(' ', '-') + '.geojson')
+        filename = os.path.join(self.__configurations.cartography_, 'sch-' + label.replace(' ', '-') + '.geojson')
+        self.__geo.persist(blob=data, filename=filename)
 
         # Add a label filed
         data.loc[:, 'label'] = label
