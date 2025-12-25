@@ -33,6 +33,21 @@ class Interface:
                 "code": "The letter code of a measure.",
                 "description": "The description of the key and code."
             },
+            "sch-catchments": {
+                "desc": "The union of the four schools data.  Additionally, the data set includes a field indicating the catchment within which each school lies."
+            },
+            "sch-primary-denominational": {
+                "desc": "The denominational primary schools."
+            },
+            "sch-primary-non-denominational": {
+                "desc": "The non-denominational primary schools."
+            },
+            "sch-secondary-denominational": {
+                "desc": "The denominational secondary schools."
+            },
+            "sch-secondary-non-denominational": {
+                "desc": "The non-denominational secondary schools."
+            },
             "assets.csv": {
                 "station_id": "The measuring station identification code.",
                 "station_name": "The station name.",
