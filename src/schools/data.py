@@ -38,8 +38,13 @@ class Data:
 
         authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
 
-        for part in self.__configurations.parts_spatial_hub_schools:
+        doublet = self.__configurations.spatial_hub_schools
+        for part, label in zip(doublet.keys(), doublet.values()):
+
+            logging.info(part)
 
             filename = self.__configurations.url_spatial_hub_schools.format(authkey=authkey, part=part)
             data = self.__get_data(filename=filename)
-            logging.info(data)
+            data.loc[:, 'label'] = label
+            data.info()
+    
