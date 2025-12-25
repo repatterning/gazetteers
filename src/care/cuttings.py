@@ -6,7 +6,7 @@ import shapely
 
 class Cuttings:
     """
-    Herein, the aim is to determine the hydrometric catchment that each care home belongs to.
+    Herein, the aim is to determine the hydrometric catchment that a point belongs to.
     """
 
     def __init__(self, reference: geopandas.GeoDataFrame):
