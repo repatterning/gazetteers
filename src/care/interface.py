@@ -4,12 +4,13 @@ import os
 
 import boto3
 import geopandas
-import pandas as pd
 
 import config
+import src.care.data
+import src.cuttings
 import src.functions.cache
 import src.functions.secret
-import src.cuttings
+import src.membership
 
 
 class Interface:
@@ -31,37 +32,6 @@ class Interface:
         self.__secret = src.functions.secret.Secret(connector=self.__connector)
         self.__configurations = config.Config()
 
-    def __get_data(self) -> geopandas.GeoDataFrame:
-        """
-        Retrieves a gazetteer of Scotland's care homes.
-
-        :return:
-        """
-
-        authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
-        filename = self.__configurations.url_spatial_hub_care.format(authkey=authkey)
-
-        try:
-            return geopandas.read_file(filename=filename)
-        except FileNotFoundError as err:
-            raise err from err
-
-    def __persist(self, blob: geopandas.GeoDataFrame, name: str):
-        """
-
-        :param blob:
-        :param name:
-        :return:
-        """
-
-        filename = os.path.join(self.__configurations.cartography_, name)
-
-        try:
-            blob.to_file(filename=filename, driver='GeoJSON')
-            logging.info('%s: Succeeded', filename)
-        except RuntimeError as err:
-            raise err from err
-
     def exc(self, coarse: geopandas.GeoDataFrame):
         """
 
@@ -69,14 +39,9 @@ class Interface:
         :return:
         """
 
-        frame = self.__get_data()
+        data: geopandas.GeoDataFrame = src.care.data.Data(
+            connector=self.__connector, arguments=self.__arguments).exc()
 
-        # Determining the catchment area of each care home
-        cuttings = src.cuttings.Cuttings(reference=frame.to_crs(epsg=coarse.crs.to_epsg()))
-        initial: list[geopandas.GeoDataFrame] = [
-            cuttings.members(_elements=_elements) for _elements in coarse.itertuples()]
-        pockets: geopandas.GeoDataFrame = pd.concat(initial, axis=0, ignore_index=True)
-
-        # Persist
-        self.__persist(blob=frame, name='care.geojson')
-        self.__persist(blob=pockets, name='care_and_coarse_catchments.geojson')
+        # membership, etc.
+        filename = os.path.join(self.__configurations.cartography_, 'care_and_coarse_catchments.geojson')
+        src.membership.Membership(coarse=coarse).exc(frame=data, filename=filename)
