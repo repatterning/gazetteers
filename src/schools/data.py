@@ -13,6 +13,9 @@ import src.functions.cache
 import src.functions.secret
 
 class Data:
+    """
+    Retrieves the latest schools data.
+    """
 
     def __init__(self, connector: boto3.session.Session, arguments: dict):
         """
@@ -25,14 +28,15 @@ class Data:
         self.__connector = connector
         self.__arguments = arguments
 
+        # Instances
         self.__secret = src.functions.secret.Secret(connector=self.__connector)
         self.__configurations = config.Config()
 
     def __persist(self, blob: geopandas.GeoDataFrame, name: str):
         """
 
-        :param blob:
-        :param name:
+        :param blob: The data to be saved
+        :param name: A name for the data file
         :return:
         """
 
@@ -46,16 +50,24 @@ class Data:
 
     @dask.delayed
     def __get_data(self, filename: str, label: str) -> geopandas.GeoDataFrame:
+        """
+
+        :param filename: A uniform resource locator string of a geo data set
+        :param label: For ensuring distinct filenames; signifies (a) level, i.e., primary or secondary, and
+                      (b) type, i.e., denominational or non-denominational.
+        :return:
+        """
 
         try:
             data = geopandas.read_file(filename=filename)
         except FileNotFoundError as err:
             raise err from err
 
+        # Save the original data
         self.__persist(blob=data, name='sch-' + label.replace(' ', '-') + '.geojson')
 
+        # Add a label filed
         data.loc[:, 'label'] = label
-        data.info()
 
         return data
 
@@ -68,6 +80,10 @@ class Data:
         return data
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         authkey = self.__secret.exc(secret_id=self.__arguments.get('project_key_name'), node='spatial-hub-geoserver')
 
