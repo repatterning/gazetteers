@@ -6,7 +6,7 @@ import geopandas
 import pandas as pd
 import shapely
 
-import src.basins.cuttings
+import src.cuttings
 
 
 class Coarse:
@@ -39,17 +39,17 @@ class Coarse:
         return attributes
 
     @dask.delayed
-    def __intersections(self, instances: geopandas.GeoDataFrame, code: int, name: str) -> geopandas.GeoDataFrame:
+    def __intersections(self, places: geopandas.GeoDataFrame, code: int, name: str) -> geopandas.GeoDataFrame:
         """
 
-        :param instances:
+        :param places:
         :param code:
         :param name:
         :return:
         """
 
         # Which [child] polygons are associated with the catchment in focus?
-        identifiers = self.__fine.geometry.map(src.basins.cuttings.Cuttings(instances=instances).inside)
+        identifiers = self.__fine.geometry.map(src.cuttings.Cuttings(places=places).inside)
         applicable = self.__fine.copy().loc[identifiers > 0, :]
 
         # Convert the polygons into a single polygon.
@@ -70,8 +70,8 @@ class Coarse:
 
         computations = []
         for code, name in zip(catchments.catchment_id.values, catchments.catchment_name.values):
-            instances = attributes.copy().loc[attributes['catchment_id'] == code, :]
-            intersections = self.__intersections(instances=instances, code=code, name=name)
+            places = attributes.copy().loc[attributes['catchment_id'] == code, :]
+            intersections = self.__intersections(places=places, code=code, name=name)
             computations.append(intersections)
         _coarse = dask.compute(computations, scheduler='threads')[0]
 
