@@ -29,6 +29,10 @@ class Config:
                                      '=filename:Care_Homes_for_Older_People_-_Scotland&outputFormat=application/json')
 
         # Schools
+        self.spatial_hub_schools = {'sh_schl:pub_schlpd': 'primary denominational',
+                                    'sh_schl:pub_schlpn': 'primary non-denominational',
+                                    'sh_schl:pub_schlsd': 'secondary denominational',
+                                    'sh_schl:pub_schlsn': 'secondary non-denominational'}
         self.parts_spatial_hub_schools = ['sh_schl:pub_schlpd', 'sh_schl:pub_schlpn', 'sh_schl:pub_schlsd', 'sh_schl:pub_schlsn']
         self.url_spatial_hub_schools = ('https://geo.spatialhub.scot/geoserver/sh_schl/wfs?service=WFS&'
                                         'authkey={authkey}&request=GetFeature&typeName={part}&format_options'
