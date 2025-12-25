@@ -28,6 +28,16 @@ class Cuttings:
 
         return self.__places.geometry.apply(lambda y: y.within(_polygon))
 
+    def inside(self, _polygon: shapely.geometry.polygon.Polygon) -> int:
+        """
+        Determines the # of places that are located within the input polygon
+
+        :param _polygon:
+        :return:
+        """
+
+        return sum(self.__is_member(_polygon=_polygon))
+
     def members(self, _elements) -> geopandas.GeoDataFrame:
         """
         .geometry: shapely.geometry.polygon.Polygon -> A catchment area polygon
