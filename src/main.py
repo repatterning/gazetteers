@@ -16,13 +16,14 @@ def main():
     logger.info(__name__)
 
     # The gauge station assets, the quality rating descriptions
-    assets = src.gauges.interface.Interface().exc()
+    assets = src.gauges.interface.Interface(connector=connector).exc()
 
     # The fine & coarse level river basins
     coarse = src.basins.interface.Interface().exc(assets=assets)
 
     # Care homes
-    src.care.interface.Interface(connector=connector, arguments=arguments).exc(coarse=coarse)
+    src.care.interface.Interface(
+        connector=connector, arguments=arguments).exc(coarse=coarse)
 
     # Schools
     src.schools.interface.Interface(
