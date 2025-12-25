@@ -1,6 +1,8 @@
 """Module interface.py"""
 import logging
-import os.path
+import os
+
+import boto3
 
 import pandas as pd
 
@@ -18,10 +20,14 @@ class Interface:
     Interface
     """
 
-    def __init__(self):
+    def __init__(self, connector: boto3.session.Session):
         """
-        Constructor
+
+        :param connector: A boto3 session instance, it retrieves the developer's <default> Amazon
+                          Web Services (AWS) profile details, which allows for programmatic interaction with AWS.
         """
+
+        self.__connector = connector
 
         # An instance for reading & writing CSV (comma separated values) data files.
         self.__streams = src.functions.streams.Streams()
@@ -49,8 +55,8 @@ class Interface:
         """
 
         # Retrieving the codes of <level> sequences, and the details of stations that record <level> sequences.
-        codes = src.gauges.codes.Codes().exc()
-        stations = src.gauges.stations.Stations().exc()
+        codes = src.gauges.codes.Codes(connector=self.__connector).exc()
+        stations = src.gauges.stations.Stations(connector=self.__connector).exc()
 
         # Hence, assets; joining codes & stations, subsequently limiting by stations
         # that were recording measures from a starting point of interest.
@@ -58,7 +64,7 @@ class Interface:
         self.__persist(blob=assets, name='assets')
 
         # Rating
-        rating = src.gauges.rating.Rating().exc()
+        rating = src.gauges.rating.Rating(connector=self.__connector).exc()
         self.__persist(blob=rating, name='rating')
 
         return assets
