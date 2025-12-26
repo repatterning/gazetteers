@@ -5,7 +5,6 @@ import boto3
 import geopandas
 
 import config
-import src.functions.cache
 import src.functions.geo
 import src.functions.secret
 
@@ -28,8 +27,6 @@ class Data:
 
         self.__secret = src.functions.secret.Secret(connector=self.__connector)
         self.__configurations = config.Config()
-
-
 
     def __get_data(self) -> geopandas.GeoDataFrame:
         """
