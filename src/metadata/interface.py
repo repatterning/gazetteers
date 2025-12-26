@@ -34,7 +34,8 @@ class Interface:
                 "description": "The description of the key and code."
             },
             "sch-catchments.geojson": {
-                "desc": "The union of the four schools data.  Additionally, the data set includes a field indicating the catchment within which each school lies."
+                "desc": ("The union of the four schools data.  Additionally, the data set includes a "
+                         "field indicating the catchment within which each school lies.")
             },
             "sch-primary-denominational.geojson": {
                 "desc": "The denominational primary schools."
