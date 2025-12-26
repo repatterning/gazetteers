@@ -1,5 +1,5 @@
 """Module algorithms/interface.py"""
-import logging
+
 import os
 
 import boto3
@@ -7,9 +7,6 @@ import geopandas
 
 import config
 import src.care.data
-import src.cuttings
-import src.functions.cache
-import src.functions.secret
 import src.membership
 
 
@@ -29,7 +26,7 @@ class Interface:
         self.__connector = connector
         self.__arguments = arguments
 
-        self.__secret = src.functions.secret.Secret(connector=self.__connector)
+        # Instances
         self.__configurations = config.Config()
 
     def exc(self, coarse: geopandas.GeoDataFrame):
