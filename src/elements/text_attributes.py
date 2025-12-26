@@ -2,6 +2,7 @@
 This is the data type TextAttributes
 """
 import typing
+import io
 
 
 class TextAttributes(typing.NamedTuple):
@@ -26,7 +27,7 @@ class TextAttributes(typing.NamedTuple):
             The date format per date field.
     """
 
-    uri: str
+    uri: str | io.StringIO
     header: int
     sep: str = ','
     usecols: list = None

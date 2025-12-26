@@ -16,13 +16,18 @@ def main():
     logger.info(__name__)
 
     # The gauge station assets, the quality rating descriptions
-    assets = src.gauges.interface.Interface().exc()
+    assets = src.gauges.interface.Interface(connector=connector).exc()
 
     # The fine & coarse level river basins
     coarse = src.basins.interface.Interface().exc(assets=assets)
 
     # Care homes
-    src.care.interface.Interface(connector=connector, arguments=arguments).exc(coarse=coarse)
+    src.care.interface.Interface(
+        connector=connector, arguments=arguments).exc(coarse=coarse)
+
+    # Schools
+    src.schools.interface.Interface(
+        connector=connector, arguments=arguments, coarse=coarse).exc()
 
     # Transfer
     src.transfer.interface.Interface(service=service, s3_parameters=s3_parameters).exc()
@@ -43,6 +48,7 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S')
 
     # Modules
+    import src.basins.interface
     import src.care.interface
     import src.gauges.interface
     import src.elements.s3_parameters as s3p
@@ -50,9 +56,9 @@ if __name__ == '__main__':
     import src.functions.cache
     import src.functions.service
     import src.s3.s3_parameters
+    import src.schools.interface
     import src.preface.interface
     import src.preface.setup
-    import src.basins.interface
     import src.transfer.interface
 
     connector: boto3.session.Session

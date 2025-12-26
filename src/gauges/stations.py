@@ -1,9 +1,11 @@
 """Module stations.py"""
+
+import boto3
 import pandas as pd
 
 import src.elements.text_attributes as txa
-import src.functions.objects
 import src.functions.streams
+import src.gauges.special
 
 
 class Stations:
@@ -14,11 +16,16 @@ class Stations:
     The stations.<br>
     """
 
-    def __init__(self):
-        """
-        Constructor
+    def __init__(self, connector: boto3.session.Session):
         """
 
+        :param connector: A boto3 session instance, it retrieves the developer's <default> Amazon
+                          Web Services (AWS) profile details, which allows for programmatic interaction with AWS.
+        """
+
+        self.__connector = connector
+
+        # Instances
         self.__streams = src.functions.streams.Streams()
 
         # The uniform resource locator for the stations vis-à-vis <Level>
@@ -36,8 +43,8 @@ class Stations:
         :return:
         """
 
-        text = txa.TextAttributes(uri=self.__uri, header=0, sep=';')
-        data = self.__streams.api(text=text)
-        data.info()
+        buffer = src.gauges.special.Special(connector=self.__connector).get_text(url=self.__uri)
+        text = txa.TextAttributes(uri=buffer, header=0, sep=';')
+        data = self.__streams.read(text=text)
 
         return data

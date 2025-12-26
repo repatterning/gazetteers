@@ -1,10 +1,14 @@
 """Module rating.py"""
 
+import logging
+
 import pandas as pd
+import boto3
 
 import src.functions.directories
 import src.functions.objects
 import src.functions.streams
+import src.gauges.special
 
 
 class Rating:
@@ -16,10 +20,14 @@ class Rating:
     quality rating</a> of a measurement.<br>
     """
 
-    def __init__(self):
+    def __init__(self, connector: boto3.session.Session):
         """
-        Constructor
+
+        :param connector: A boto3 session instance, it retrieves the developer's <default> Amazon
+                          Web Services (AWS) profile details, which allows for programmatic interaction with AWS.
         """
+
+        self.__connector = connector
 
         self.__url = ('https://timeseries.sepa.org.uk/KiWIS/KiWIS?service=kisters&type=queryServices'
                       '&request=getQualityCodes&datasource=0&format=json')
@@ -63,8 +71,11 @@ class Rating:
         :return:
         """
 
-        objects = src.functions.objects.Objects()
-        values = objects.api(url=self.__url)
+        # objects = src.functions.objects.Objects()
+        # values = objects.api(url=self.__url)
+
+        values = src.gauges.special.Special(connector=self.__connector).get_json(url=self.__url)
+        logging.info(values)
 
         data = self.__structure(values=values)
         data = self.__anomalies(data=data.copy())
