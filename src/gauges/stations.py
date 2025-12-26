@@ -1,14 +1,12 @@
 """Module stations.py"""
 
-import logging
-
-import pandas as pd
 import boto3
+import pandas as pd
 
 import src.elements.text_attributes as txa
-import src.functions.objects
 import src.functions.streams
 import src.gauges.special
+
 
 class Stations:
     """
@@ -27,6 +25,7 @@ class Stations:
 
         self.__connector = connector
 
+        # Instances
         self.__streams = src.functions.streams.Streams()
 
         # The uniform resource locator for the stations vis-à-vis <Level>
@@ -45,10 +44,7 @@ class Stations:
         """
 
         buffer = src.gauges.special.Special(connector=self.__connector).get_text(url=self.__uri)
-
         text = txa.TextAttributes(uri=buffer, header=0, sep=';')
         data = self.__streams.read(text=text)
-        data.info()
-        logging.info(data)
 
         return data
